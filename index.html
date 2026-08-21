@@ -3,114 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jackpot Poker Generator</title>
+    <title>Generator Angka Keberuntungan</title>
     <style>
         body {
-            background-color: #1a1a1a;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
             color: #ffd700;
             font-family: 'Arial', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
         }
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             text-shadow: 2px 2px 4px #000;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
+            text-align: center;
         }
-        .jackpot-container {
+        .subtitle {
+            color: #ccc;
+            font-size: 1rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .lucky-container {
             display: flex;
             gap: 20px;
-            background: #222;
+            background: rgba(255, 255, 255, 0.05);
             padding: 30px;
             border-radius: 15px;
-            border: 4px solid #ffd700;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
         }
         .slot {
             width: 80px;
             height: 100px;
             background-color: #fff;
-            color: #000;
+            color: #1a1a2e;
             font-size: 3.5rem;
             font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 10px;
-            border: 3px solid #000;
+            border: 3px solid #ffd700;
         }
         button {
             margin-top: 30px;
-            padding: 15px 50px;
-            font-size: 1.5rem;
+            padding: 15px 40px;
+            font-size: 1.3rem;
             font-weight: bold;
-            background-color: #e60000;
-            color: white;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #1a1a2e;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 6px #990000;
+            box-shadow: 0 6px #b8860b;
             transition: transform 0.1s;
         }
         button:active {
             transform: translateY(4px);
-            box-shadow: 0 2px #990000;
+            box-shadow: 0 2px #b8860b;
         }
         button:disabled {
-            background-color: #666;
+            background: #666;
+            color: #aaa;
             box-shadow: none;
             cursor: not-allowed;
             transform: translateY(4px);
         }
         #result {
             margin-top: 25px;
-            font-size: 1.8rem;
+            font-size: 1.3rem;
             font-weight: bold;
-            min-height: 40px;
+            min-height: 60px;
             color: #fff;
+            text-align: center;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+        .disclaimer {
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #888;
+            text-align: center;
+            max-width: 400px;
         }
     </style>
 </head>
 <body>
-    <h1>🎰 JACKPOT POKER 🎰</h1>
+    <h1>✨ Angka Keberuntungan Harian ✨</h1>
+    <p class="subtitle">Temukan angka hoki kamu untuk hari ini!</p>
     
-    <div class="jackpot-container">
-        <div class="slot" id="slot1">0</div>
-        <div class="slot" id="slot2">0</div>
-        <div class="slot" id="slot3">0</div>
+    <div class="lucky-container">
+        <div class="slot" id="slot1">?</div>
+        <div class="slot" id="slot2">?</div>
+        <div class="slot" id="slot3">?</div>
     </div>
     
-    <button id="spinBtn" onclick="spin()">PUTAR!</button>
+    <button id="spinBtn" onclick="generateLucky()">DAPATKAN ANGKA HOKI!</button>
     <div id="result"></div>
 
+    <p class="disclaimer">
+        *Hanya untuk hiburan. Angka ini dihasilkan secara acak dan tidak menjamin apapun. Tetap semangat dan bersyukur! 🙏
+    </p>
+
     <script>
-        function spin() {
+        const messages = [
+            "Angka ini membawa energi positif untukmu hari ini! 🌟",
+            "Kombinasi yang menarik! Semoga harimu menyenangkan. 😊",
+            "Angka hoki yang unik! Manfaatkan kesempatan di sekitarmu. 🍀",
+            "Kombinasi istimewa! Hari yang baik untuk mencoba hal baru. 🌈",
+            "Angka keberuntunganmu sudah keluar! Tetap optimis ya. 💪",
+            "Energi positif menyertai angka-angka ini. Selamat beraktivitas! ✨"
+        ];
+
+        function generateLucky() {
             const btn = document.getElementById('spinBtn');
             const resultText = document.getElementById('result');
             
-            // Matikan tombol saat berputar agar tidak diklik dua kali
             btn.disabled = true;
-            resultText.innerText = "Memutar...";
+            resultText.innerText = "Mencari angka hoki untukmu...";
             resultText.style.color = "#fff";
 
             let counter = 0;
-            const maxSpins = 25; // Jumlah kedipan sebelum berhenti
+            const maxSpins = 20;
             
             const interval = setInterval(() => {
-                // Tampilkan angka acak 1-9 saat berputar
                 document.getElementById('slot1').innerText = Math.floor(Math.random() * 9) + 1;
                 document.getElementById('slot2').innerText = Math.floor(Math.random() * 9) + 1;
                 document.getElementById('slot3').innerText = Math.floor(Math.random() * 9) + 1;
                 counter++;
 
                 if (counter >= maxSpins) {
-                    clearInterval(interval); // Hentikan putaran
+                    clearInterval(interval);
                     
-                    // Tentukan hasil akhir
                     const final1 = Math.floor(Math.random() * 9) + 1;
                     const final2 = Math.floor(Math.random() * 9) + 1;
                     const final3 = Math.floor(Math.random() * 9) + 1;
@@ -119,19 +150,14 @@
                     document.getElementById('slot2').innerText = final2;
                     document.getElementById('slot3').innerText = final3;
 
-                    // Cek apakah JACKPOT (ketiga angka sama)
-                    if (final1 === final2 && final2 === final3) {
-                        resultText.innerText = "🎉 JACKPOT! ANDA MENANG! 🎉";
-                        resultText.style.color = "#ffd700";
-                    } else {
-                        resultText.innerText = "Belum beruntung, coba lagi!";
-                        resultText.style.color = "#fff";
-                    }
+                    const luckyNumber = "" + final1 + final2 + final3;
+                    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
                     
-                    // Nyalakan kembali tombol
+                    resultText.innerHTML = "Angka hoki kamu: <span style='color:#ffd700; font-size:1.6rem;'>" + luckyNumber + "</span><br>" + randomMessage;
+                    
                     btn.disabled = false;
                 }
-            }, 100); // Kecepatan ganti angka (100 milidetik)
+            }, 100);
         }
     </script>
 </body>
