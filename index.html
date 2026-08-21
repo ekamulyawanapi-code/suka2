@@ -1,1 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jackpot Poker Generator</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #ffd700;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px #000;
+            margin-bottom: 30px;
+        }
+        .jackpot-container {
+            display: flex;
+            gap: 20px;
+            background: #222;
+            padding: 30px;
+            border-radius: 15px;
+            border: 4px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        .slot {
+            width: 80px;
+            height: 100px;
+            background-color: #fff;
+            color: #000;
+            font-size: 3.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            border: 3px solid #000;
+        }
+        button {
+            margin-top: 30px;
+            padding: 15px 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background-color: #e60000;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 6px #990000;
+            transition: transform 0.1s;
+        }
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px #990000;
+        }
+        button:disabled {
+            background-color: #666;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: translateY(4px);
+        }
+        #result {
+            margin-top: 25px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            min-height: 40px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎰 JACKPOT POKER 🎰</h1>
+    
+    <div class="jackpot-container">
+        <div class="slot" id="slot1">0</div>
+        <div class="slot" id="slot2">0</div>
+        <div class="slot" id="slot3">0</div>
+    </div>
+    
+    <button id="spinBtn" onclick="spin()">PUTAR!</button>
+    <div id="result"></div>
 
+    <script>
+        function spin() {
+            const btn = document.getElementById('spinBtn');
+            const resultText = document.getElementById('result');
+            
+            // Matikan tombol saat berputar agar tidak diklik dua kali
+            btn.disabled = true;
+            resultText.innerText = "Memutar...";
+            resultText.style.color = "#fff";
+
+            let counter = 0;
+            const maxSpins = 25; // Jumlah kedipan sebelum berhenti
+            
+            const interval = setInterval(() => {
+                // Tampilkan angka acak 1-9 saat berputar
+                document.getElementById('slot1').innerText = Math.floor(Math.random() * 9) + 1;
+                document.getElementById('slot2').innerText = Math.floor(Math.random() * 9) + 1;
+                document.getElementById('slot3').innerText = Math.floor(Math.random() * 9) + 1;
+                counter++;
+
+                if (counter >= maxSpins) {
+                    clearInterval(interval); // Hentikan putaran
+                    
+                    // Tentukan hasil akhir
+                    const final1 = Math.floor(Math.random() * 9) + 1;
+                    const final2 = Math.floor(Math.random() * 9) + 1;
+                    const final3 = Math.floor(Math.random() * 9) + 1;
+                    
+                    document.getElementById('slot1').innerText = final1;
+                    document.getElementById('slot2').innerText = final2;
+                    document.getElementById('slot3').innerText = final3;
+
+                    // Cek apakah JACKPOT (ketiga angka sama)
+                    if (final1 === final2 && final2 === final3) {
+                        resultText.innerText = "🎉 JACKPOT! ANDA MENANG! 🎉";
+                        resultText.style.color = "#ffd700";
+                    } else {
+                        resultText.innerText = "Belum beruntung, coba lagi!";
+                        resultText.style.color = "#fff";
+                    }
+                    
+                    // Nyalakan kembali tombol
+                    btn.disabled = false;
+                }
+            }, 100); // Kecepatan ganti angka (100 milidetik)
+        }
+    </script>
+</body>
+</html>
