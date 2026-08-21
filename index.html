@@ -132,7 +132,7 @@
             </div>
         </div>
         
-        <button onclick="generateNumber()">🎯 Generate Angka Acak</button>
+        <button id="generateBtn">🎯 Generate Angka Acak</button>
         
         <div class="result" id="result">
             <div class="result-label">Angka yang terpilih:</div>
@@ -145,48 +145,66 @@
     </div>
 
     <script>
-        // Fungsi untuk membuat suara koin
-        function playCoinSound() {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            
-            // Suara koin pertama
-            setTimeout(() => {
-                const oscillator1 = audioContext.createOscillator();
-                const gainNode1 = audioContext.createGain();
-                
-                oscillator1.connect(gainNode1);
-                gainNode1.connect(audioContext.destination);
-                
-                oscillator1.frequency.value = 1200;
-                oscillator1.type = 'sine';
-                
-                gainNode1.gain.setValueAtTime(0.3, audioContext.currentTime);
-                gainNode1.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-                
-                oscillator1.start(audioContext.currentTime);
-                oscillator1.stop(audioContext.currentTime + 0.1);
-            }, 0);
-            
-            // Suara koin kedua (lebih tinggi)
-            setTimeout(() => {
-                const oscillator2 = audioContext.createOscillator();
-                const gainNode2 = audioContext.createGain();
-                
-                oscillator2.connect(gainNode2);
-                gainNode2.connect(audioContext.destination);
-                
-                oscillator2.frequency.value = 1600;
-                oscillator2.type = 'sine';
-                
-                gainNode2.gain.setValueAtTime(0.3, audioContext.currentTime);
-                gainNode2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
-                
-                oscillator2.start(audioContext.currentTime);
-                oscillator2.stop(audioContext.currentTime + 0.15);
-            }, 100);
+        // Inisialisasi AudioContext di awal
+        let audioContext = null;
+
+        // Fungsi untuk menginisialisasi audio
+        function initAudio() {
+            if (!audioContext) {
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.log('Audio tidak didukung di browser ini');
+                }
+            }
+            return audioContext;
         }
 
-        function generateNumber() {
+        // Fungsi untuk membuat suara koin
+        function playCoinSound() {
+            const ctx = initAudio();
+            if (!ctx) return;
+
+            // Resume audio context jika diperlukan
+            if (ctx.state === 'suspended') {
+                ctx.resume();
+            }
+
+            // Suara koin pertama
+            const osc1 = ctx.createOscillator();
+            const gain1 = ctx.createGain();
+            
+            osc1.connect(gain1);
+            gain1.connect(ctx.destination);
+            
+            osc1.frequency.value = 1200;
+            osc1.type = 'sine';
+            
+            gain1.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+            
+            osc1.start(ctx.currentTime);
+            osc1.stop(ctx.currentTime + 0.1);
+            
+            // Suara koin kedua (lebih tinggi)
+            const osc2 = ctx.createOscillator();
+            const gain2 = ctx.createGain();
+            
+            osc2.connect(gain2);
+            gain2.connect(ctx.destination);
+            
+            osc2.frequency.value = 1600;
+            osc2.type = 'sine';
+            
+            gain2.gain.setValueAtTime(0.3, ctx.currentTime + 0.1);
+            gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+            
+            osc2.start(ctx.currentTime + 0.1);
+            osc2.stop(ctx.currentTime + 0.25);
+        }
+
+        // Event listener untuk tombol
+        document.getElementById('generateBtn').addEventListener('click', function() {
             // Mainkan suara koin
             playCoinSound();
             
@@ -205,7 +223,7 @@
             
             numberDisplay.innerText = randomNumber;
             resultDiv.classList.add('show');
-        }
+        });
     </script>
 </body>
 </html>
